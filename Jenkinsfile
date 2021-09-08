@@ -40,6 +40,12 @@ pipeline {
                 sh 'docker-compose -p tests run -p 3000 --rm web npm run watch-tests'
             }
         }
+        stage ('NodeJsScan Analysis') {
+            steps {
+                // Run SAST with NodeJsScan
+                sh 'nodejsscan --directory `pwd` --output /{JENKINS HOME DIRECTORY}/reports/nodejsscan-report'
+            }
+        }
         stage('Generating reports') {
             steps {
                 sh 'docker-compose -p tests run -p 3000 --rm web npm run coverage'
